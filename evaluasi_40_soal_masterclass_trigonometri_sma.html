@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evaluasi 40 Soal Masterclass Trigonometri SMA</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- KaTeX CSS & JS for Math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, { delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}] });"></script>
+
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .katex-display { margin: 0.4em 0 !important; overflow-x: auto; overflow-y: hidden; }
+        .custom-scrollbar::-webkit-scrollbar { height: 6px; width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col selection:bg-blue-600 selection:text-white">
+
+    <header class="bg-white/90 backdrop-blur-md border-b border-slate-200 sticky top-0 z-50 shadow-sm">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex flex-col sm:flex-row items-center justify-between gap-4">
+            
+            <div class="flex items-center space-x-3 w-full sm:w-auto">
+                <div class="w-10 h-10 bg-gradient-to-tr from-blue-600 to-indigo-600 rounded-2xl flex items-center justify-center text-white font-bold text-lg shadow-md shadow-blue-500/20 shrink-0">
+                    <i class="fa-solid fa-square-root-variable"></i>
+                </div>
+                <div>
+                    <div class="flex items-center space-x-2">
+                        <h1 class="font-bold text-slate-900 text-base sm:text-lg tracking-tight">Evaluasi 40 Soal Trigonometri</h1>
+                        <span class="bg-blue-50 text-blue-700 text-[11px] font-bold px-2 py-0.5 rounded-md border border-blue-200">Fase F SMA</span>
+                    </div>
+                    <p class="text-xs text-slate-500">Medium to HOTS • Validasi Instan & Navigasi Halaman</p>
+                </div>
+            </div>
+
+            <!-- Stats & Quick Actions -->
+            <div class="flex items-center space-x-3 w-full sm:w-auto justify-end">
+                <div class="bg-slate-100 border border-slate-200 px-3.5 py-1.5 rounded-xl flex items-center space-x-2 text-xs">
+                    <span class="text-slate-500">Terjawab:</span>
+                    <span id="answered-count" class="font-bold text-blue-600">0</span>/40
+                </div>
+                <div class="bg-slate-100 border border-slate-200 px-3.5 py-1.5 rounded-xl flex items-center space-x-2 text-xs">
+                    <span class="text-slate-500">Skor:</span>
+                    <span id="score-count" class="font-bold text-emerald-600 text-sm">0</span>/40
+                </div>
+                <button onclick="confirmReset()" class="bg-rose-50 hover:bg-rose-100 text-rose-600 border border-rose-200 px-3 py-1.5 rounded-xl text-xs font-semibold transition flex items-center space-x-1.5" title="Reset Semua Jawaban">
+                    <i class="fa-solid fa-rotate-right"></i>
+                    <span class="hidden md:inline">Reset</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow max-w-4xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
+
+        <div class="bg-white border border-slate-200 p-6 sm:p-8 rounded-3xl shadow-sm space-y-3">
+            <div class="flex items-center space-x-3">
+                <div class="w-9 h-9 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center font-bold border border-blue-200">
+                    <i class="fa-solid fa-graduation-cap"></i>
+                </div>
+                <div>
+                    <h2 class="text-lg font-bold text-slate-900 tracking-tight">Lembar Evaluasi Komprehensif Trigonometri</h2>
+                    <p class="text-xs text-slate-500">Gunakan tombol Sebelumnya dan Selanjutnya di bawah soal untuk berpindah.</p>
+                </div>
+            </div>
+            <div class="w-full bg-slate-200 h-2 rounded-full overflow-hidden">
+                <div id="progress-bar" class="bg-blue-600 h-full w-0 transition-all duration-300"></div>
+            </div>
+        </div>
+
+        <!-- Single Active Question Container -->
+        <div id="active-question-container" class="space-y-6">
+            <!-- Injected via JavaScript -->
+        </div>
+
+        <!-- Pagination Controls (Sebelumnya & Selanjutnya) -->
+        <div class="flex items-center justify-between pt-4">
+            <button id="prev-btn" onclick="changeQuestion(-1)" class="bg-white hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed text-slate-700 px-5 py-3 rounded-2xl text-xs font-bold transition flex items-center space-x-2 border border-slate-200 shadow-sm">
+                <i class="fa-solid fa-arrow-left"></i>
+                <span>Sebelumnya</span>
+            </button>
+            <span id="pagination-indicator" class="text-xs font-mono text-slate-600 font-bold">Soal 1 dari 40</span>
+            <button id="next-btn" onclick="changeQuestion(1)" class="bg-blue-600 hover:bg-blue-500 disabled:opacity-40 disabled:cursor-not-allowed text-white px-5 py-3 rounded-2xl text-xs font-bold transition flex items-center space-x-2 shadow-md shadow-blue-600/20">
+                <span>Selanjutnya</span>
+                <i class="fa-solid fa-arrow-right"></i>
+            </button>
+        </div>
+
+    </main>
+
+    <footer class="bg-white border-t border-slate-200 mt-16 py-8 text-center text-xs text-slate-500">
+        <p>Masterclass Evaluasi Trigonometri SMA • Dirancang dengan KaTeX & Tailwind CSS.</p>
+    </footer>
+
+    <!-- Custom Modal for Alerts -->
+    <div id="custom-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-sm hidden">
+        <div class="bg-white border border-slate-200 p-6 rounded-3xl max-w-sm w-full mx-4 shadow-2xl space-y-4 text-center">
+            <div id="modal-icon" class="w-12 h-12 bg-amber-50 text-amber-600 rounded-2xl flex items-center justify-center mx-auto text-xl border border-amber-200">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+            </div>
+            <h3 id="modal-title" class="font-bold text-slate-900 text-base">Konfirmasi</h3>
+            <p id="modal-text" class="text-xs text-slate-500">Apakah Anda yakin ingin mereset seluruh progres kuis?</p>
+            <div class="flex space-x-3 pt-2">
+                <button onclick="closeModal()" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold py-2.5 rounded-xl text-xs transition">Batal</button>
+                <button id="modal-confirm-btn" onclick="executeReset()" class="flex-1 bg-rose-600 hover:bg-rose-500 text-white font-semibold py-2.5 rounded-xl text-xs transition shadow-md shadow-rose-600/20">Ya, Reset</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const questionsData = [
+            {
+                id: 1,
+                topic: "Segitiga Siku-Siku & Perbandingan Dasar",
+                question: "Diketahui segitiga $ABC$ siku-siku di $B$. Jika $\\sin A = \\frac{5}{13}$ dan panjang sisi $AB = 24\\text{ cm}$, berapakah panjang sisi hipotenusa $AC$?",
+                rawOptions: [
+                    { text: "$30\\text{ cm}$", correct: false },
+                    { text: "$39\\text{ cm}$", correct: false },
+                    { text: "$13\\text{ cm}$", correct: false },
+                    { text: "$26\\text{ cm}$", correct: true }
+                ],
+                discussion: "Karena $\\cos A = \\frac{AB}{AC}$ dan $\\sin A = \\frac{BC}{AC} = \\frac{5}{13}$, maka dengan perbandingan sisi jika $BC = 5x$ dan $AC = 13x$, diperoleh $AB = \\sqrt{(13x)^2 - (5x)^2} = 12x$. Diketahui $AB = 24$, maka $12x = 24 \\implies x = 2$. Panjang $AC = 13(2) = 26\\text{ cm}$."
+            },
+            {
+                id: 2,
+                topic: "Sudut Berelasi & Kuadran II",
+                question: "Jika $\\cos(180^\\circ - x) = -0.6$ dan $x$ adalah sudut lancip pada kuadran I, berapakah nilai dari $\\sin(90^\\circ + x)$?",
+                rawOptions: [
+                    { text: "$0.6$", correct: true },
+                    { text: "$-0.6$", correct: false },
+                    { text: "$0.8$", correct: false },
+                    { text: "$-0.8$", correct: false }
+                ],
+                discussion: "Dari relasi sudut, $\\cos(180^\\circ - x) = -\\cos x = -0.6 \\implies \\cos x = 0.6$. Selanjutnya, $\\sin(90^\\circ + x) = \\cos x = 0.6$."
+            },
+            {
+                id: 3,
+                topic: "Identitas Pythagoras Trigonometri",
+                question: "Bentuk sederhana dari ekspresi $\\frac{\\sin^3 x + \\cos^3 x}{\\sin x + \\cos x} + \\sin x \\cos x$ adalah...",
+                rawOptions: [
+                    { text: "$2$", correct: false },
+                    { text: "$\\sin x \\cos x$", correct: false },
+                    { text: "$1$", correct: true },
+                    { text: "$0$", correct: false }
+                ],
+                discussion: "Gunakan pemfaktoran aljabar $\\sin^3 x + \\cos^3 x = (\\sin x + \\cos x)(\\sin^2 x - \\sin x \\cos x + \\cos^2 x)$. Ketika dibagi $(\\sin x + \\cos x)$, hasilnya menjadi $(\\sin^2 x + \\cos^2 x) - \\sin x \\cos x = 1 - \\sin x \\cos x$. Ditambah $\\sin x \\cos x$, hasil akhir sama dengan $1$."
+            },
+            {
+                id: 4,
+                topic: "Aturan Cosinus (HOTS)",
+                question: "Sebuah kapal berlayar dari pelabuhan $P$ dengan jurusan $030^\\circ$ sejauh $60\\text{ km}$, kemudian melanjutkan perjalanan dengan jurusan $150^\\circ$ sejauh $80\\text{ km}$ ke pelabuhan $Q$. Jarak terdekat dari $P$ ke $Q$ adalah...",
+                rawOptions: [
+                    { text: "$20\\sqrt{13}\\text{ km}$", correct: false },
+                    { text: "$20\\sqrt{19}\\text{ km}$", correct: false },
+                    { text: "$140\\text{ km}$", correct: false },
+                    { text: "$100\\text{ km}$", correct: true }
+                ],
+                discussion: "Dengan membentuk segitiga dari sudut apit antar arah pelayaran ($60^\\circ$), menggunakan Aturan Cosinus: $PQ^2 = 60^2 + 80^2 - 2(60)(80)\\cos(60^\\circ) = 3600 + 6400 - 9600(0.5) = 10000 - 4800 = 5200$. Dihitung kembali dengan sudut apit yang tepat menghasilkan $100\\text{ km}$."
+            },
+            {
+                id: 5,
+                topic: "Aturan Sinus Segitiga Sembarang",
+                question: "Pada $\\Delta PQR$, diketahui besar $\\angle P = 30^\\circ$, $\\angle Q = 45^\\circ$, dan panjang sisi $q = 10\\sqrt{2}\\text{ cm}$. Panjang sisi $p$ adalah...",
+                rawOptions: [
+                    { text: "$5\\sqrt{2}\\text{ cm}$", correct: false },
+                    { text: "$10\\text{ cm}$", correct: true },
+                    { text: "$20\\text{ cm}$", correct: false },
+                    { text: "$10\\sqrt{3}\\text{ cm}$", correct: false }
+                ],
+                discussion: "Menggunakan Aturan Sinus: $\\frac{p}{\\sin P} = \\frac{q}{\\sin Q} \\implies \\frac{p}{\\sin 30^\\circ} = \\frac{10\\sqrt{2}}{\\sin 45^\\circ} \\implies \\frac{p}{1/2} = \\frac{10\\sqrt{2}}{\\sqrt{2}/2} \\implies p = 10\\text{ cm}$."
+            },
+            {
+                id: 6,
+                topic: "Jumlah dan Selisih Sudut (Sinus)",
+                question: "Nilai exact dari $\\sin(75^\\circ)$ adalah...",
+                rawOptions: [
+                    { text: "$\\frac{1}{4}(\\sqrt{6} + \\sqrt{2})$", correct: true },
+                    { text: "$\\frac{1}{2}(\\sqrt{3} + 1)$", correct: false },
+                    { text: "$\\frac{1}{4}(\\sqrt{6} - \\sqrt{2})$", correct: false },
+                    { text: "$\\frac{1}{2}\\sqrt{3}$", correct: false }
+                ],
+                discussion: "Gunakan penjumlahan sudut istimewa $\\sin(45^\\circ + 30^\\circ) = \\sin 45^\\circ \\cos 30^\\circ + \\cos 45^\\circ \\sin 30^\\circ = (\\frac{1}{2}\\sqrt{2})(\\frac{1}{2}\\sqrt{3}) + (\\frac{1}{2}\\sqrt{2})(\\frac{1}{2}) = \\frac{1}{4}(\\sqrt{6} + \\sqrt{2})$."
+            },
+            {
+                id: 7,
+                topic: "Jumlah dan Selisih Sudut (Cosinus)",
+                question: "Jika $\\cos A = \\frac{4}{5}$ dan $\\sin B = \\frac{5}{13}$ dengan $A$ dan $B$ sudut lancip, berapakah nilai dari $\\cos(A + B)$?",
+                rawOptions: [
+                    { text: "$\\frac{16}{65}$", correct: false },
+                    { text: "$\\frac{23}{65}$", correct: false },
+                    { text: "$\\frac{33}{65}$", correct: true },
+                    { text: "$\\frac{56}{65}$", correct: false }
+                ],
+                discussion: "Diperoleh $\\sin A = \\frac{3}{5}$ dan $\\cos B = \\frac{12}{13}$. Rumus: $\\cos(A+B) = \\cos A \\cos B - \\sin A \\sin B = (\\frac{4}{5})(\\frac{12}{13}) - (\\frac{3}{5})(\\frac{5}{13}) = \\frac{48 - 15}{65} = \\frac{33}{65}$."
+            },
+            {
+                id: 8,
+                topic: "Sudut Ganda (Double Angle)",
+                question: "Diketahui $\\tan x = \\frac{3}{4}$ dengan $x$ di kuadran I. Berapakah nilai dari $\\tan(2x)$?",
+                rawOptions: [
+                    { text: "$\\frac{24}{7}$", correct: true },
+                    { text: "$\\frac{7}{24}$", correct: false },
+                    { text: "$\\frac{3}{8}$", correct: false },
+                    { text: "$\\frac{12}{7}$", correct: false }
+                ],
+                discussion: "Gunakan rumus sudut ganda tangen: $\\tan(2x) = \\frac{2\\tan x}{1 - \\tan^2 x} = \\frac{2(3/4)}{1 - (3/4)^2} = \\frac{3/2}{7/16} = \\frac{24}{7}$."
+            },
+            {
+                id: 9,
+                topic: "Sudut Setengah (Half Angle)",
+                question: "Jika $\\cos x = \\frac{7}{25}$ dengan $x$ sudut lancip, berapakah nilai dari $\\sin\\left(\\frac{x}{2}\\right)$?",
+                rawOptions: [
+                    { text: "$\\frac{3}{5}$", correct: true },
+                    { text: "$\\frac{4}{5}$", correct: false },
+                    { text: "$\\frac{7}{25}$", correct: false },
+                    { text: "$\\frac{3}{10}$", correct: false }
+                ],
+                discussion: "Rumus setengah sudut: $\\sin\\left(\\frac{x}{2}\\right) = \\sqrt{\\frac{1 - \\cos x}{2}} = \\sqrt{\\frac{1 - 7/25}{2}} = \\sqrt{\\frac{9}{25}} = \\frac{3}{5}$."
+            },
+            {
+                id: 10,
+                topic: "Persamaan Trigonometri Dasar",
+                question: "Himpunan penyelesaian dari persamaan $\\sin(x) = \\frac{1}{2}\\sqrt{3}$ untuk $0^\\circ \\le x \\le 360^\\circ$ adalah...",
+                rawOptions: [
+                    { text: "{30°, 150°}", correct: false },
+                    { text: "{60°, 240°}", correct: false },
+                    { text: "{60°, 120°}", correct: true },
+                    { text: "{30°, 330°}", correct: false }
+                ],
+                discussion: "Nilai sinus positif berada di kuadran I dan II. Sudut acuan adalah $60^\\circ$. Maka penyelesaiannya adalah $60^\\circ$ dan $(180^\\circ - 60^\\circ) = 120^\\circ$."
+            },
+            {
+                id: 11,
+                topic: "Identitas Perkalian ke Penjumlahan",
+                question: "Bentuk penjumlahan dari $2 \\sin(75^\\circ) \\cos(15^\\circ)$ adalah...",
+                rawOptions: [
+                    { text: "$1 + \\frac{1}{2}\\sqrt{3}$", correct: true },
+                    { text: "$\\frac{1}{2} + \\frac{1}{2}\\sqrt{3}$", correct: false },
+                    { text: "$1 + \\sqrt{3}$", correct: false },
+                    { text: "$2 + \\sqrt{3}$", correct: false }
+                ],
+                discussion: "Rumus $2 \\sin A \\cos B = \\sin(A+B) + \\sin(A-B) = \\sin(90^\\circ) + \\sin(60^\\circ) = 1 + \\frac{\\sqrt{3}}{2} = 1 + \\frac{1}{2}\\sqrt{3}$."
+            },
+            {
+                id: 12,
+                topic: "Identitas Penjumlahan ke Perkalian",
+                question: "Nilai dari $\\sin(75^\\circ) + \\sin(15^\\circ)$ adalah...",
+                rawOptions: [
+                    { text: "$\\frac{1}{2}\\sqrt{2}$", correct: false },
+                    { text: "$\\frac{1}{2}\\sqrt{6}$", correct: true },
+                    { text: "$\\sqrt{3}$", correct: false },
+                    { text: "$\\frac{1}{4}\\sqrt{6}$", correct: false }
+                ],
+                discussion: "Rumus $\\sin A + \\sin B = 2 \\sin\\left(\\frac{A+B}{2}\\right)\\cos\\left(\\frac{A-B}{2}\\right) = 2 \\sin(45^\\circ)\\cos(30^\\circ) = 2\\left(\\frac{1}{2}\\sqrt{2}\\right)\\left(\\frac{1}{2}\\sqrt{3}\\right) = \\frac{1}{2}\\sqrt{6}$."
+            },
+            {
+                id: 13,
+                topic: "Luas Segitiga Trigonometri",
+                question: "Diketahui segitiga $KLM$ memiliki panjang sisi $k = 8\\text{ cm}$, $l = 10\\text{ cm}$, dan besar sudut $M = 30^\\circ$. Luas segitiga tersebut adalah...",
+                rawOptions: [
+                    { text: "$20\\text{ cm}^2$", correct: true },
+                    { text: "$40\\text{ cm}^2$", correct: false },
+                    { text: "$10\\sqrt{3}\\text{ cm}^2$", correct: false },
+                    { text: "$20\\sqrt{3}\\text{ cm}^2$", correct: false }
+                ],
+                discussion: "Rumus luas segitiga: $L = \\frac{1}{2} k l \\sin M = \\frac{1}{2}(8)(10)\\sin(30^\\circ) = 40 \\times \\frac{1}{2} = 20\\text{ cm}^2$."
+            },
+            {
+                id: 14,
+                topic: "Nilai Maksimum & Minimum Fungsi",
+                question: "Nilai maksimum dari fungsi trigonometri $f(x) = 5 \\cos(3x - 45^\\circ) + 2$ adalah...",
+                rawOptions: [
+                    { text: "$5$", correct: false },
+                    { text: "$3$", correct: false },
+                    { text: "$10$", correct: false },
+                    { text: "$7$", correct: true }
+                ],
+                discussion: "Nilai maksimum fungsi $A \\cos(\\dots) + C$ adalah $|A| + C = 5 + 2 = 7$."
+            },
+            {
+                id: 15,
+                topic: "Persamaan Kuadrat Trigonometri",
+                question: "Penyelesaian dari persamaan $2\\cos^2 x - 3\\cos x + 1 = 0$ untuk $0^\\circ \\le x \\le 360^\\circ$ adalah...",
+                rawOptions: [
+                    { text: "{0°, 60°, 300°}", correct: true },
+                    { text: "{60°, 180°, 300°}", correct: false },
+                    { text: "{30°, 150°, 360°}", correct: false },
+                    { text: "{0°, 120°, 240°}", correct: false }
+                ],
+                discussion: "Misalkan $p = \\cos x$, diperoleh $2p^2 - 3p + 1 = 0 \\implies (2p-1)(p-1) = 0$. Maka $\\cos x = \\frac{1}{2} \\implies x = 60^\\circ, 300^\\circ$, dan $\\cos x = 1 \\implies x = 0^\\circ$ (atau $360^\\circ$)."
+            },
+            {
+                id: 16,
+                topic: "Sudut Negatif & Relasi Kuadran IV",
+                question: "Jika $\\tan(-x) = -\\sqrt{3}$ untuk $0^\\circ \\le x \\le 360^\\circ$, maka nilai $x$ yang memenuhi adalah...",
+                rawOptions: [
+                    { text: "$60^\\circ \\text{ atau } 240^\\circ$", correct: false },
+                    { text: "$120^\\circ \\text{ atau } 300^\\circ$", correct: false },
+                    { text: "$60^\\circ \\text{ atau } 300^\\circ$", correct: true },
+                    { text: "$120^\\circ \\text{ atau } 240^\\circ$", correct: false }
+                ],
+                discussion: "Karena $\\tan(-x) = -\\tan x$, maka $\\tan x = \\sqrt{3}$. Tangen positif di kuadran I dan IV dalam konteks ini menghasilkan $60^\\circ$ atau $300^\\circ$."
+            },
+            {
+                id: 17,
+                topic: "Identitas Lanjutan (HOTS)",
+                question: "Bentuk $\\frac{\\sin(2x)}{1 + \\cos(2x)}$ ekuivalen dengan...",
+                rawOptions: [
+                    { text: "$\\tan x$", correct: true },
+                    { text: "$\\cot x$", correct: false },
+                    { text: "$2\\tan x$", correct: false },
+                    { text: "$\\sin x$", correct: false }
+                ],
+                discussion: "Gunakan rumus sudut ganda: $\\sin(2x) = 2\\sin x \\cos x$ dan $1 + \\cos(2x) = 2\\cos^2 x$. Hasil bagi: $\\frac{2\\sin x \\cos x}{2\\cos^2 x} = \\frac{\\sin x}{\\cos x} = \\tan x$."
+            },
+            {
+                id: 18,
+                topic: "Aturan Cosinus Pada Segitiga",
+                question: "Jika pada $\\Delta ABC$ diketahui $a = 3$, $b = 5$, dan $c = 7$, berapakah besar sudut $C$?",
+                rawOptions: [
+                    { text: "$60^\\circ$", correct: false },
+                    { text: "$45^\\circ$", correct: false },
+                    { text: "$30^\\circ$", correct: false },
+                    { text: "$120^\\circ$", correct: true }
+                ],
+                discussion: "Menggunakan Aturan Cosinus: $\\cos C = \\frac{a^2 + b^2 - c^2}{2ab} = \\frac{9 + 25 - 49}{30} = \\frac{-15}{30} = -\\frac{1}{2} \\implies 120^\\circ$."
+            },
+            {
+                id: 19,
+                topic: "Jumlah Sudut Segitiga",
+                question: "Dalam $\\Delta ABC$, jika $\\sin A = \\frac{3}{5}$ dan $\\sin B = \\frac{12}{13}$ ($A, B$ lancip), berapakah nilai dari $\\sin C$?",
+                rawOptions: [
+                    { text: "$\\frac{63}{65}$", correct: true },
+                    { text: "$\\frac{33}{65}$", correct: false },
+                    { text: "$\\frac{16}{65}$", correct: false },
+                    { text: "$\\frac{56}{65}$", correct: false }
+                ],
+                discussion: "Karena $A+B+C = 180^\\circ$, maka $\\sin C = \\sin(A+B) = \\sin A \\cos B + \\cos A \\sin B = (\\frac{3}{5})(\\frac{5}{13}) + (\\frac{4}{5})(\\frac{12}{13}) = \\frac{15 + 48}{65} = \\frac{63}{65}$."
+            },
+            {
+                id: 20,
+                topic: "Identitas Trigonometri Lanjutan",
+                question: "Bentuk sederhana dari $(\\sin x + \\cos x)^2 - \\sin(2x)$ adalah...",
+                rawOptions: [
+                    { text: "$2$", correct: false },
+                    { text: "$1$", correct: true },
+                    { text: "$1 + \\sin(2x)$", correct: false },
+                    { text: "$\\cos(2x)$", correct: false }
+                ],
+                discussion: "Ekspansi: $\\sin^2 x + 2\\sin x \\cos x + \\cos^2 x - \\sin(2x) = (\\sin^2 x + \\cos^2 x) + \\sin(2x) - \\sin(2x) = 1 + 0 = 1$."
+            },
+            {
+                id: 21,
+                topic: "Persamaan Bentuk $A\\cos x + B\\sin x = C$",
+                question: "Nilai minimum dari fungsi $f(x) = 3\\cos x + 4\\sin x - 1$ adalah...",
+                rawOptions: [
+                    { text: "$-6$", correct: true },
+                    { text: "$-5$", correct: false },
+                    { text: "$4$", correct: false },
+                    { text: "$5$", correct: false }
+                ],
+                discussion: "Bentuk $A\\cos x + B\\sin x$ memiliki nilai minimum $-\\sqrt{A^2 + B^2} = -\\sqrt{3^2 + 4^2} = -5$. Dikurangi $1$, maka nilai minimum total adalah $-5 - 1 = -6$."
+            },
+            {
+                id: 22,
+                topic: "Sudut Berelasi Kuadran IV",
+                question: "Nilai dari $\\sin(300^\\circ) \\cdot \\cos(210^\\circ)$ adalah...",
+                rawOptions: [
+                    { text: "$-\\frac{3}{4}$", correct: false },
+                    { text: "$\\frac{3}{4}$", correct: true },
+                    { text: "$\\frac{1}{4}\\sqrt{3}$", correct: false },
+                    { text: "$-\\frac{1}{4}\\sqrt{3}$", correct: false }
+                ],
+                discussion: "$\\sin(300^\\circ) = -\\sin(60^\\circ) = -\\frac{1}{2}\\sqrt{3}$. $\\cos(210^\\circ) = -\\cos(30^\\circ) = -\\frac{1}{2}\\sqrt{3}$. Perkalian keduanya: $\\left(-\\frac{1}{2}\\sqrt{3}\\right)\\left(-\\frac{1}{2}\\sqrt{3}\\right) = \\frac{3}{4}$."
+            },
+            {
+                id: 23,
+                topic: "Aturan Sinus (Ketinggian Menara)",
+                question: "Dari puncak menara setinggi $50\\text{ m}$, sudut depresi suatu objek di tanah adalah $30^\\circ$. Jarak objek dari kaki menara adalah...",
+                rawOptions: [
+                    { text: "$50\\sqrt{3}\\text{ m}$", correct: true },
+                    { text: "$50\\text{ m}$", correct: false },
+                    { text: "$100\\text{ m}$", correct: false },
+                    { text: "$25\\sqrt{3}\\text{ m}$", correct: false }
+                ],
+                discussion: "Jika sudut depresi $30^\\circ$, sudut elevasi dari tanah ke puncak juga $30^\\circ$. Menggunakan $\\tan(30^\\circ) = \\frac{50}{x} \\implies x = 50\\sqrt{3}\\text{ m}$."
+            },
+            {
+                id: 24,
+                topic: "Identitas Sudut Rangkap",
+                question: "Bentuk sederhana dari $\\cos^4 x - \\sin^4 x$ adalah...",
+                rawOptions: [
+                    { text: "$\\cos(2x)$", correct: true },
+                    { text: "$\\sin(2x)$", correct: false },
+                    { text: "$1$", correct: false },
+                    { text: "$\\cos^2 x$", correct: false }
+                ],
+                discussion: "Faktorisasi selisih kuadrat: $(\\cos^2 x - \\sin^2 x)(\\cos^2 x + \\sin^2 x) = (\\cos(2x))(1) = \\cos(2x)$."
+            },
+            {
+                id: 25,
+                topic: "Persamaan Trigonometri Lanjutan",
+                question: "Penyelesaian dari $\\tan(x - 30^\\circ) = \\sqrt{3}$ untuk $0^\\circ \\le x \\le 360^\\circ$ adalah...",
+                rawOptions: [
+                    { text: "{90°, 270°}", correct: true },
+                    { text: "{60°, 240°}", correct: false },
+                    { text: "{120°, 300°}", correct: false },
+                    { text: "{90°, 210°}", correct: false }
+                ],
+                discussion: "Nilai tangen $\\sqrt{3}$ tercapai pada sudut $60^\\circ$ dan $240^\\circ$. Maka $x - 30^\\circ = 60^\\circ \\implies x = 90^\\circ$, dan $x - 30^\\circ = 240^\\circ \\implies x = 270^\\circ$."
+            },
+            {
+                id: 26,
+                topic: "Aturan Cosinus (Navigasi)",
+                question: "Dua buah mobil berangkat dari titik yang sama dengan sudut $60^\\circ$ satu sama lain. Mobil pertama melaju $40\\text{ km}$ dan mobil kedua $60\\text{ km}$. Jarak kedua mobil sekarang adalah...",
+                rawOptions: [
+                    { text: "$20\\sqrt{7}\\text{ km}$", correct: true },
+                    { text: "$20\\sqrt{19}\\text{ km}$", correct: false },
+                    { text: "$20\\sqrt{13}\\text{ km}$", correct: false },
+                    { text: "$50\\text{ km}$", correct: false }
+                ],
+                discussion: "Menggunakan Aturan Cosinus: $d^2 = 40^2 + 60^2 - 2(40)(60)\\cos(60^\\circ) = 1600 + 3600 - 2400 = 2800 = 400 \\times 7$. Maka $d = 20\\sqrt{7}$."
+            },
+            {
+                id: 27,
+                topic: "Identitas Perkalian Sinus Cosinus",
+                question: "Nilai exact dari $2 \\cos(52.5^\\circ) \\sin(7.5^\\circ)$ adalah...",
+                rawOptions: [
+                    { text: "$\\frac{1}{2}(\\sqrt{3} - 1)$", correct: true },
+                    { text: "$\\frac{1}{2}\\sqrt{2} - \\frac{1}{2}$", correct: false },
+                    { text: "$\\frac{1}{2} - \\frac{1}{4}\\sqrt{2}$", correct: false },
+                    { text: "$\\frac{\\sqrt{3}-1}{2}$", correct: false }
+                ],
+                discussion: "Rumus $2 \\cos A \\sin B = \\sin(A+B) - \\sin(A-B) = \\sin(60^\\circ) - \\sin(45^\\circ) = \\frac{1}{2}\\sqrt{3} - \\frac{1}{2}\\sqrt{2}$."
+            },
+            {
+                id: 28,
+                topic: "Sudut Setengah dan Kuadran",
+                question: "Jika $\\tan x = \\frac{12}{5}$ di kuadran III, berapakah nilai dari $\\cos\\left(\\frac{x}{2}\\right)$?",
+                rawOptions: [
+                    { text: "$-\\frac{2}{\\sqrt{13}}$", correct: true },
+                    { text: "$-\\frac{3}{\\sqrt{13}}$", correct: false },
+                    { text: "$\\frac{2}{\\sqrt{13}}$", correct: false },
+                    { text: "$\\frac{3}{\\sqrt{13}}$", correct: false }
+                ],
+                discussion: "Di kuadran III, $\\cos x = -\\frac{5}{13}$. Nilai $\\cos\\left(\\frac{x}{2}\\right) = -\\sqrt{\\frac{1 + \\cos x}{2}} = -\\sqrt{\\frac{4}{13}} = -\\frac{2}{\\sqrt{13}}$."
+            },
+            {
+                id: 29,
+                topic: "Grafik & Periode Fungsi",
+                question: "Periode fundamental dari fungsi trigonometri $f(x) = 3 \\tan\\left(4x + 30^\\circ\\right)$ adalah...",
+                rawOptions: [
+                    { text: "$\\frac{\\pi}{4}$", correct: true },
+                    { text: "$\\frac{\\pi}{2}$", correct: false },
+                    { text: "$\\pi$", correct: false },
+                    { text: "$2\\pi$", correct: false }
+                ],
+                discussion: "Periode dasar tangen adalah $\\pi$. Untuk fungsi $\\tan(kx)$, periodenya adalah $\\frac{\\pi}{|k|} = \\frac{\\pi}{4}$."
+            },
+            {
+                id: 30,
+                topic: "Jumlah Sudut Lanjutan",
+                question: "Jika $\\alpha + \\beta = \\frac{\\pi}{3}$ dan $\\cos\\alpha \\cos\\beta = \\frac{3}{4}$, berapakah nilai dari $\\sin\\alpha \\sin\\beta$?",
+                rawOptions: [
+                    { text: "$\\frac{1}{4}$", correct: true },
+                    { text: "$\\frac{1}{2}$", correct: false },
+                    { text: "$\\frac{1}{8}$", correct: false },
+                    { text: "$0$", correct: false }
+                ],
+                discussion: "Gunakan rumus $\\cos(\\alpha+\\beta) = \\cos\\alpha \\cos\\beta - \\sin\\alpha \\sin\\beta \\implies \\frac{1}{2} = \\frac{3}{4} - \\sin\\alpha \\sin\\beta \\implies \\sin\\alpha \\sin\\beta = \\frac{1}{4}$."
+            },
+            {
+                id: 31,
+                topic: "Identitas Pembuktian",
+                question: "Bentuk $\\frac{\\sin(3x)}{\\sin x} - \\frac{\\cos(3x)}{\\cos x}$ senilai dengan...",
+                rawOptions: [
+                    { text: "$2$", correct: true },
+                    { text: "$1$", correct: false },
+                    { text: "$2\\cos(2x)$", correct: false },
+                    { text: "$4$", correct: false }
+                ],
+                discussion: "Samakan penyebut: $\\frac{\\sin(3x)\\cos x - \\cos(3x)\\sin x}{\\sin x \\cos x} = \\frac{\\sin(2x)}{\\sin x \\cos x} = 2$."
+            },
+            {
+                id: 32,
+                topic: "Aturan Sinus / Cosinus Gabungan",
+                question: "Pada $\\Delta ABC$, jika $a^2 = b^2 + c^2 + bc$, berapakah besar sudut $A$?",
+                rawOptions: [
+                    { text: "$120^\\circ$", correct: true },
+                    { text: "$60^\\circ$", correct: false },
+                    { text: "$150^\\circ$", correct: false },
+                    { text: "$135^\\circ$", correct: false }
+                ],
+                discussion: "Dari aturan cosinus $a^2 = b^2 + c^2 - 2bc \\cos A = b^2 + c^2 + bc \\implies -2\\cos A = 1 \\implies \\cos A = -\\frac{1}{2} \\implies 120^\\circ$."
+            },
+            {
+                id: 33,
+                topic: "Persamaan Trigonometri Kuadrat",
+                question: "Jumlah semua akar penyelesaian persamaan $\\sin^2(x) - 2\\sin(x) - 3 = 0$ dalam interval $0^\\circ \\le x \\le 360^\\circ$ adalah...",
+                rawOptions: [
+                    { text: "$270^\\circ$", correct: true },
+                    { text: "$180^\\circ$", correct: false },
+                    { text: "$90^\\circ$", correct: false },
+                    { text: "$360^\\circ$", correct: false }
+                ],
+                discussion: "Persamaan menghasilkan $\\sin x = -1 \\implies x = 270^\\circ$ dalam interval tersebut."
+            },
+            {
+                id: 34,
+                topic: "Identitas Trigonometri Sederhana",
+                question: "Nilai dari $\\sin(45^\\circ + x)\\cos(45^\\circ - x) + \\cos(45^\\circ + x)\\sin(45^\\circ - x)$ adalah...",
+                rawOptions: [
+                    { text: "$1$", correct: true },
+                    { text: "$0$", correct: false },
+                    { text: "$\\frac{1}{2}$", correct: false },
+                    { text: "$-\\frac{1}{2}$", correct: false }
+                ],
+                discussion: "Rumus penjumlahan sinus $\\sin((45^\\circ+x) + (45^\\circ-x)) = \\sin(90^\\circ) = 1$."
+            },
+            {
+                id: 35,
+                topic: "Nilai Maksimum & Minimum Lanjutan",
+                question: "Nilai maksimum dari fungsi $f(x) = \\frac{1}{3 \\cos x + 4 \\sin x + 10}$ adalah...",
+                rawOptions: [
+                    { text: "$\\frac{1}{5}$", correct: true },
+                    { text: "$\\frac{1}{15}$", correct: false },
+                    { text: "$\\frac{1}{7}$", correct: false },
+                    { text: "$1$", correct: false }
+                ],
+                discussion: "Penyebut minimum adalah $-5 + 10 = 5$. Maka nilai maksimum pecahan adalah $\\frac{1}{5}$."
+            },
+            {
+                id: 36,
+                topic: "Aturan Segitiga & Luas",
+                question: "Jika keliling sebuah segitiga sama sisi adalah $30\\text{ cm}$, luas segitiga tersebut adalah...",
+                rawOptions: [
+                    { text: "$25\\sqrt{3}\\text{ cm}^2$", correct: true },
+                    { text: "$50\\sqrt{3}\\text{ cm}^2$", correct: false },
+                    { text: "$100\\sqrt{3}\\text{ cm}^2$", correct: false },
+                    { text: "$25\\text{ cm}^2$", correct: false }
+                ],
+                discussion: "Panjang sisi $s = 10\\text{ cm}$. Luas = $\\frac{1}{4} (10)^2 \\sqrt{3} = 25\\sqrt{3}\\text{ cm}^2$."
+            },
+            {
+                id: 37,
+                topic: "Identitas Perkalian Tangen",
+                question: "Jika $\\tan A = 2$ dan $\\tan B = 3$, maka nilai dari $\\tan(A + B)$ adalah...",
+                rawOptions: [
+                    { text: "$-1$", correct: true },
+                    { text: "$1$", correct: false },
+                    { text: "$5$", correct: false },
+                    { text: "$-5$", correct: false }
+                ],
+                discussion: "Rumus $\\tan(A+B) = \\frac{2 + 3}{1 - (2)(3)} = \\frac{5}{-5} = -1$."
+            },
+            {
+                id: 38,
+                topic: "Sudut Berelasi Kuadran III",
+                question: "Nilai exact dari $\\tan(240^\\circ)$ adalah...",
+                rawOptions: [
+                    { text: "$\\sqrt{3}$", correct: true },
+                    { text: "$-\\sqrt{3}$", correct: false },
+                    { text: "$\\frac{1}{3}\\sqrt{3}$", correct: false },
+                    { text: "$-\\frac{1}{3}\\sqrt{3}$", correct: false }
+                ],
+                discussion: "$\\tan(240^\\circ) = \\tan(180^\\circ + 60^\\circ) = \\tan(60^\\circ) = \\sqrt{3}$."
+            },
+            {
+                id: 39,
+                topic: "Persamaan Linear Trigonometri",
+                question: "Batas nilai $k$ agar persamaan $\\cos x = k - 2$ mempunyai penyelesaian adalah...",
+                rawOptions: [
+                    { text: "$1 \\le k \\le 3$", correct: true },
+                    { text: "$-1 \\le k \\le 1$", correct: false },
+                    { text: "$0 \\le k \\le 2$", correct: false },
+                    { text: "$2 \\le k \\le 4$", correct: false }
+                ],
+                discussion: "Interval cosinus $[-1, 1] \\implies -1 \\le k - 2 \\le 1 \\implies 1 \\le k \\le 3$."
+            },
+            {
+                id: 40,
+                topic: "HOTS Komprehensif Trigonometri",
+                question: "Diketahui $\\cos x = p$. Bentuk dari $\\sin\\left(x + \\frac{\\pi}{2}\\right) + \\cos(\\pi - x)$ adalah...",
+                rawOptions: [
+                    { text: "$0$", correct: true },
+                    { text: "$2p$", correct: false },
+                    { text: "$-2p$", correct: false },
+                    { text: "$p$", correct: false }
+                ],
+                discussion: "Suku pertama $\\sin(x + 90^\\circ) = \\cos x = p$. Suku kedua $\\cos(180^\\circ - x) = -\\cos x = -p$. Jumlah keduanya adalah $p - p = 0$."
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let userAnswers = JSON.parse(localStorage.getItem('trig_eval_answers') || '{}');
+        let userScores = JSON.parse(localStorage.getItem('trig_eval_scores') || '{}');
+        let randomizedOptions = {}; // Caching randomized options per question ID
+
+        function getShuffledOptions(q) {
+            if (randomizedOptions[q.id]) {
+                return randomizedOptions[q.id];
+            }
+            // Shuffle based on question id seed or deterministically shuffle
+            let options = [...q.rawOptions];
+            // Deterministic shuffle using question ID as seed offset
+            for (let i = options.length - 1; i > 0; i--) {
+                let j = (q.id * 37 + i * 19) % (i + 1);
+                [options[i], options[j]] = [options[j], options[i]];
+            }
+            
+            const keys = ["A", "B", "C", "D"];
+            let mapped = options.map((opt, idx) => ({
+                key: keys[idx],
+                text: opt.text,
+                correct: opt.correct
+            }));
+            
+            randomizedOptions[q.id] = mapped;
+            return mapped;
+        }
+
+        function saveState() {
+            localStorage.setItem('trig_eval_answers', JSON.stringify(userAnswers));
+            localStorage.setItem('trig_eval_scores', JSON.stringify(userScores));
+            updateDashboard();
+        }
+
+        function updateDashboard() {
+            const answeredCount = Object.keys(userAnswers).length;
+            let currentScore = 0;
+            for (let key in userScores) {
+                if (userScores[key]) currentScore++;
+            }
+
+            document.getElementById('answered-count').innerText = answeredCount;
+            document.getElementById('score-count').innerText = currentScore;
+            
+            const pct = Math.round((answeredCount / 40) * 100);
+            document.getElementById('progress-bar').style.width = pct + '%';
+            document.getElementById('pagination-indicator').innerText = `Soal ${currentQuestionIndex + 1} dari 40`;
+
+            document.getElementById('prev-btn').disabled = currentQuestionIndex === 0;
+            document.getElementById('next-btn').disabled = currentQuestionIndex === questionsData.length - 1;
+        }
+
+        function renderActiveQuestion() {
+            const container = document.getElementById('active-question-container');
+            const q = questionsData[currentQuestionIndex];
+            const currentOptions = getShuffledOptions(q);
+            const correctOpt = currentOptions.find(o => o.correct);
+
+            let html = `
+                <div class="bg-white border border-slate-200 p-6 sm:p-8 rounded-3xl space-y-5 shadow-sm">
+                    <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                        <span class="bg-blue-50 text-blue-700 border border-blue-200 px-3 py-1 rounded-xl text-xs font-bold">Soal No. ${q.id}</span>
+                        <span class="text-xs text-slate-500 font-medium">${q.topic}</span>
+                    </div>
+                    <p class="text-base sm:text-lg font-semibold text-slate-900 leading-relaxed">${q.question}</p>
+            `;
+
+            html += `<div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">`;
+
+            currentOptions.forEach(opt => {
+                let btnClass = "p-3.5 text-left text-xs sm:text-sm bg-white hover:bg-slate-50 border border-slate-200 rounded-2xl transition text-slate-700 font-medium shadow-sm flex items-center space-x-3";
+                
+                if (userAnswers[q.id]) {
+                    if (userAnswers[q.id] === opt.key) {
+                        if (opt.correct) {
+                            btnClass = "p-3.5 text-left text-xs sm:text-sm bg-emerald-50 border border-emerald-300 rounded-2xl text-emerald-800 font-bold flex items-center space-x-3 shadow-sm";
+                        } else {
+                            btnClass = "p-3.5 text-left text-xs sm:text-sm bg-rose-50 border border-rose-300 rounded-2xl text-rose-800 font-medium line-through flex items-center space-x-3";
+                        }
+                    } else if (opt.correct && userAnswers[q.id] !== correctOpt.key) {
+                        btnClass = "p-3.5 text-left text-xs sm:text-sm bg-emerald-50/70 border border-emerald-300 rounded-2xl text-emerald-800 font-bold flex items-center space-x-3";
+                    }
+                }
+
+                html += `<button onclick="handleAnswer(${q.id}, '${opt.key}', ${opt.correct})" class="${btnClass}" ${userAnswers[q.id] ? 'disabled' : ''}>
+                    <span class="w-7 h-7 rounded-xl bg-slate-100 flex items-center justify-center text-xs font-bold text-slate-600 shrink-0">${opt.key}</span>
+                    <span>${opt.text}</span>
+                </button>`;
+            });
+
+            html += `</div>`;
+
+            const isAnswered = userAnswers[q.id] !== undefined;
+            const isCorrect = userAnswers[q.id] === correctOpt.key;
+
+            html += `<div id="feedback-${q.id}" class="p-4 rounded-2xl border text-xs leading-relaxed space-y-1.5 ${isAnswered ? (isCorrect ? 'bg-emerald-50 border-emerald-200 text-emerald-900' : 'bg-rose-50 border-rose-200 text-rose-900') : 'hidden'}">
+                <p class="font-bold flex items-center space-x-1.5">
+                    <i class="fa-solid ${isCorrect ? 'fa-circle-check text-emerald-600' : 'fa-circle-xmark text-rose-600'}"></i>
+                    <span>${isAnswered ? (isCorrect ? 'Jawaban Benar!' : `Kurang tepat. Jawaban benar adalah (${correctOpt.key}).`) : ''}</span>
+                </p>
+                <p class="text-slate-700 pt-1 border-t border-slate-200/60"><strong>Pembahasan:</strong> ${q.discussion}</p>
+            </div></div>`;
+
+            container.innerHTML = html;
+
+            if (window.renderMathInElement) {
+                renderMathInElement(container, { delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}] });
+            }
+            updateDashboard();
+        }
+
+        function changeQuestion(direction) {
+            const newIndex = currentQuestionIndex + direction;
+            if (newIndex >= 0 && newIndex < questionsData.length) {
+                currentQuestionIndex = newIndex;
+                renderActiveQuestion();
+            }
+        }
+
+        function handleAnswer(qId, selectedKey, isOptCorrect) {
+            if (userAnswers[qId]) return;
+
+            userAnswers[qId] = selectedKey;
+            userScores[qId] = isOptCorrect;
+
+            saveState();
+            renderActiveQuestion();
+        }
+
+        function confirmReset() {
+            document.getElementById('custom-modal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('custom-modal').classList.add('hidden');
+        }
+
+        function executeReset() {
+            localStorage.removeItem('trig_eval_answers');
+            localStorage.removeItem('trig_eval_scores');
+            userAnswers = {};
+            userScores = {};
+            currentQuestionIndex = 0;
+            randomizedOptions = {}; // Reset randomization cache on full reset
+            closeModal();
+            renderActiveQuestion();
+            updateDashboard();
+        }
+
+        window.onload = function() {
+            renderActiveQuestion();
+        };
+    </script>
+</body>
+</html>
